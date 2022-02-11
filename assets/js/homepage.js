@@ -38,8 +38,6 @@ var formSubmitHandler = function(event) {
     console.log(event);
 };
 
-userFormEl.addEventListener("submit", formSubmitHandler);
-
 var displayRepos = function(repos, searchTerm) {
   //check if api returned any repos
   if (repos.length === 0) {
@@ -87,3 +85,4 @@ for (var i = 0; i < repos.length; i++) {
   }
 };
 
+userFormEl.addEventListener("submit", formSubmitHandler);
