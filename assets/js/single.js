@@ -70,9 +70,9 @@ var displayIssues = function(issues) {
 
         // check if issue is an actual issue or a pull request
         if (issues[i].pull_request) {
-        typeEl.textContent = "(Pull request)";
+          typeEl.textContent = "(Pull request)";
         } else {
-        typeEl.textContent = "(Issue)";
+          typeEl.textContent = "(Issue)";
         }
 
         // append to container

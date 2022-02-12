@@ -2,6 +2,8 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelector("#language-buttons");
+
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -17,6 +19,17 @@ var formSubmitHandler = function(event) {
     } else {
         alert("Please enter a GitHub username");
     }
+};
+
+var buttonClickHandler = function(event) {
+  var language = event.target.getAttribute("data-language");
+  
+  if (language) {
+    getFeaturedRepos(language);
+  
+    // clear old content
+    repoContainerEl.textContent = "";
+  }
 };
 
 var getUserRepos = function(user) {
@@ -42,6 +55,22 @@ var getUserRepos = function(user) {
     });
 };
 
+var getFeaturedRepos = function(language) {
+  var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+
+  fetch(apiUrl).then(function(response) {
+    if (response.ok) {
+      //extract JSON from response by parsing it, then logging data
+      response.json().then(function(data) {
+        //console.log(data); -- rather than doing this, call back below to pass the items
+        displayRepos(data.items, language)
+      });
+    } else {
+      alert("Error: " + response.statusText);
+    }
+  });
+};
+
 var displayRepos = function(repos, searchTerm) {
   //check if api returned any repos
   if (repos.length === 0) {
@@ -49,7 +78,7 @@ var displayRepos = function(repos, searchTerm) {
     return;
   }
 
-    repoSearchTerm.textContent = searchTerm;
+  repoSearchTerm.textContent = searchTerm;
 
     // loop over repos to dynamically create HTML elements from API
   for (var i = 0; i < repos.length; i++) {
@@ -87,4 +116,6 @@ var displayRepos = function(repos, searchTerm) {
     }
   };
 
+//add event listeners to form and button container
 userFormEl.addEventListener("submit", formSubmitHandler);
+languageButtonsEl.addEventListener("click", buttonClickHandler);
